@@ -397,7 +397,7 @@ class Game(arcade.Window):
                 trem.para_direita()
             else:
                 vel_x, vel_y = self.update_velocidade_verde()
-                trem.center.x = 288
+                trem.center.y = 288
                 trem.vel.dx = 1 + vel_x
                 trem.vel.dy = 0
                 trem.state = "L4"

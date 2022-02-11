@@ -35,12 +35,12 @@ class Trem:
         self.center = Point()
         self.prop = SizesAngles()
         self.prop.width = 50
-        self.prop.heigth = 20
+        self.prop.height = 20
         self.vel = Velocity()
         self.state = ""
 
     def draw(self):
-        arcade.draw_rectangle_filled(self.center.x, self.center.y, self.prop.width, self.prop.heigth, self.prop.color.self.prop.angle)
+        arcade.draw_rectangle_filled(self.center.x, self.center.y, self.prop.width, self.prop.height, self.prop.color,self.prop.angle)
 
     def para_direita(self):
         self.center.x += self.vel.dx
@@ -65,13 +65,13 @@ mutex4 = threading.Lock()
 mutex5 = threading.Lock()
 
 class Game(arcade.Window):
-    def __init__(self, width, heigth):
-        super().__init__(width, heigth)
+    def __init__(self, width, height):
+        super().__init__(width, height)
         self.held_keys = set()
         self.trilhos = []
-        self.create.trilho()
+        self.create_trilho()
         self.trens = []
-        self.create.train()
+        self.create_train()
         self.verde_vel_x = 0
         self.verde_vel_y = 0
         self.roxo_vel_x = 0
@@ -81,11 +81,11 @@ class Game(arcade.Window):
         self.azul_vel_x = 0
         self.azul_vel_y = 0
 
-        self.t_y = threading.Thread(target=self.t_verde)
+        self.t_v = threading.Thread(target=self.t_verde)
         self.t_r = threading.Thread(target=self.t_roxo)
         self.t_a = threading.Thread(target=self.t_amarelo)
         self.t_z = threading.Thread(target=self.t_azul)
-        self.t_y.start()
+        self.t_v.start()
         self.t_r.start()
         self.t_a.start()
         self.t_z.start()
@@ -119,11 +119,11 @@ class Game(arcade.Window):
         arcade.draw_text("TREM AZUL", start_x=1150, start_y=300, font_size=18, color=arcade.color.BLUE)
         arcade.draw_text(str((self.trem_azul.vel.dx + self.trem_azul.vel.dy) * 20) + "km/h", start_x=1150, start_y=150, font_size=18, color=arcade.color.BLUE)
 
-    for trem in self.trens:
-        trem.draw()
+        for trem in self.trens:
+            trem.draw()
 
-    for trilho in self.trilhos:
-        trilho.draw()
+        for trilho in self.trilhos:
+            trilho.draw()
 
     def create_train(self):
         self.trem_verde = Trem()
@@ -268,15 +268,13 @@ class Game(arcade.Window):
             if self.trem_verde.center.y > 509:
                 self.L2(self.verde_vel_x, self.verde_vel_y)
 
-            if self.trem_verde.center.x >= 410 and (
-                    self.trem_verde.center.y >= 291 and self.trem_verde.center.y <= 510):
+            if self.trem_verde.center.x >= 410 and (self.trem_verde.center.y >= 291 and self.trem_verde.center.y <= 510):
                 mutex2.acquire()
                 mutex1.acquire()
                 self.L3(self.trem_verde, self.verde_vel_x, self.verde_vel_y)
                 mutex1.release()
 
-            if self.trem_verde.center.y <= 291 and (
-                    self.trem_verde.center.x <= 412 and self.trem_verde.center.x >= 191):
+            if self.trem_verde.center.y <= 291 and (self.trem_verde.center.x <= 412 and self.trem_verde.center.x >= 191):
                 self.L4(self.trem_verde, self.verde_vel_x, self.verde_vel_y)
                 mutex2.release()
 
@@ -287,23 +285,22 @@ class Game(arcade.Window):
 
     def t_roxo(self):
         while (1):
-
             if self.trem_roxo.center.y > 509:
                 self.L7(self.roxo_vel_x, self.roxo_vel_y)
 
-            if self.trem_roxo.center.x >= 633 and (self.trem_roxo.center.y >= 510 and self.trem_roxo.center.y <= 289):
+            if self.trem_roxo.center.x >= 633 and (self.trem_roxo.center.y <= 510 and self.trem_roxo.center.y >= 289):
                 mutex4.acquire()
                 self.L5(self.trem_roxo, self.roxo_vel_x, self.roxo_vel_y)
                 mutex3.acquire()
                 mutex4.release()
 
-            if self.trem_roxo.center.y <= 289 and (self.trem_roxo.center.x <= 414 and self.trem_roxo.center.x >= 638):
+            if self.trem_roxo.center.y <= 289 and (self.trem_roxo.center.x >= 414 and self.trem_roxo.center.x <= 638):
                 mutex1.acquire()
                 self.L6(self.trem_roxo, self.roxo_vel_x, self.roxo_vel_y)
                 mutex3.release()
 
             if self.trem_roxo.center.x <= 415 and (self.trem_roxo.center.y < 510):
-                self.L3(self.roxo_vel_x, self.roxo_vel_y)
+                self.L3(self.trem_roxo,self.roxo_vel_x, self.roxo_vel_y)
                 mutex1.release()
 
             time.sleep(0.03)
@@ -317,21 +314,19 @@ class Game(arcade.Window):
             if self.trem_amarelo.center.x >= 859 and (self.trem_amarelo.center.y >= 289):
                 self.L9(self.amarelo_vel_x, self.amarelo_vel_y)
 
-            if self.trem_amarelo.center.y <= 289 and (
-                    self.trem_amarelo.center.x <= 860 and self.trem_amarelo.center.x >= 637):
+            if (self.trem_amarelo.center.y <= 289) and (self.trem_amarelo.center.x <= 860 and self.trem_amarelo.center.x >= 637):
                 mutex4.acquire()
                 mutex5.acquire()
                 self.L10(self.trem_amarelo, self.amarelo_vel_x, self.amarelo_vel_y)
 
-            if self.trem_amarelo.center.x <= 638 and (
-                    self.trem_amarelo.center.y >= 288 and self.trem_amarelo.center.y < 510):
+            elif self.trem_amarelo.center.x <= 638 and (self.trem_amarelo.center.y >= 288 and self.trem_amarelo.center.y < 510):
                 mutex5.release()
                 self.L5(self.trem_amarelo, self.amarelo_vel_x, self.amarelo_vel_y)
                 mutex4.release()
 
             time.sleep(0.03)
 
-    def azul(self):
+    def t_azul(self):
         while (1):
             if self.trem_azul.center.y > 287:
                 if self.trem_azul.center.x <= 414:
@@ -346,18 +341,19 @@ class Game(arcade.Window):
                 if self.trem_azul.center.x >= 636:
                     self.L10(self.trem_azul, self.azul_vel_x, self.azul_vel_y)
                     mutex5.release()
-            if self.trem_azul.center.x >= 859 and (self.trem_azul.center.y >= 66):
+
+            if self.trem_azul.center.x > 859 and self.trem_azul.center.y >= 66:
                 self.L12(self.azul_vel_x, self.azul_vel_y)
 
-            if self.trem_azul.center.y < 66 and (self.trem_azul.center.x >= 191):
+            if self.trem_azul.center.y < 66 and self.trem_azul.center.x >= 191:
                 self.L13(self.azul_vel_x, self.azul_vel_y)
 
-            if self.trem_azul.center.x < 191 and (trem.self_azul.center.y < 288):
+            elif self.trem_azul.center.x < 191 and self.trem_azul.center.y < 288:
                 self.L11(self.azul_vel_x, self.azul_vel_y)
 
             time.sleep(0.03)
 
-    def L1(self, vel_x, vel_y):
+    def L1(self,vel_x,vel_y):
         self.trem_verde.center.x = 190
         self.trem_verde.vel.dx = 0
         self.trem_verde.vel.dy = 1 + self.verde_vel_y
@@ -367,8 +363,8 @@ class Game(arcade.Window):
     def L2(self, vel_x, vel_y):
         vel_x, vel_y = self.update_velocidade_verde()
         self.trem_verde.center.y = 510
-        self.trem_verde.vel.dx = 0
-        self.trem_verde.vel.dy = 1 + vel_x
+        self.trem_verde.vel.dy = 0
+        self.trem_verde.vel.dx = 1 + vel_x
         self.trem_verde.state = "L2"
         self.trem_verde.para_direita()
 
@@ -390,7 +386,7 @@ class Game(arcade.Window):
                 trem.para_cima()
             time.sleep(0.02)
 
-    def L4(self, trem, vel_x, vel_y):
+    def L4(self,trem, vel_x, vel_y):
         while (trem.center.x <= 413 and trem.center.x >= 189):
             if (trem.prop.color == arcade.color.BLUE):
                 vel_x, vel_y = self.update_velocidade_azul()
@@ -429,7 +425,7 @@ class Game(arcade.Window):
     def L6(self, trem, vel_x, vel_y):
         i = 637
         j = 411
-        while (trem.center.x <= i and trem.center.y >= j):
+        while (trem.center.x <= i and trem.center.x >= j):
             if (trem.prop.color == arcade.color.PURPLE):
                 j = 411
                 vel_x, vel_y = self.update_velocidade_roxo()
@@ -475,7 +471,7 @@ class Game(arcade.Window):
     def L10(self, trem, vel_x, vel_y):
         i = 860
         j = 637
-        while (trem.center.x <= i and trem.center.y >= j):
+        while (trem.center.x <= i and trem.center.x >= j):
             if (trem.prop.color == arcade.color.YELLOW):
                 i = 860
                 j = 637

@@ -122,8 +122,8 @@ class Game(arcade.Window):
     for trem in self.trens:
         trem.draw()
 
-        for trilho in self.trilhos:
-            trilho.draw()
+    for trilho in self.trilhos:
+        trilho.draw()
 
     def create_train(self):
         self.trem_verde = Trem()

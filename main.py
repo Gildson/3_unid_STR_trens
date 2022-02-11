@@ -2,6 +2,7 @@ import arcade
 import random
 import time
 import threading
+from threading import Lock
 
 class Velocity:
     def __init__(self):

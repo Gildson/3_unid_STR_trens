@@ -19,7 +19,6 @@ class SizesAngles:
         self.angle = 0
         self.width = 220
         self.height = 220
-        #self.color = arcade.color.RED
 
 class Trilho:
     def __init__(self):
@@ -85,9 +84,6 @@ class Game(arcade.Window):
         self.t_a.start()
         self.t_z.start()
         self.t_v.start()
-
-    #def update(self, delta_time):
-        #print("{}, {}".format(self.trem_vermelho.center.x, self.trem_vermelho.center.y))
 
     def on_draw(self):
         arcade.start_render()
